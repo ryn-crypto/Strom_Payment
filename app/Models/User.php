@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use \Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -17,15 +18,15 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    // protected $table = 'users';
+    protected $table = 'users';
     protected $fillable = [
         'nama',
-        'img',
         'email',
         'alamat',
-        'meter_id',
-        'level_id',
         'password',
+        'img',
+        'meter_id',
+        'level_id'
     ];
 
     /**
@@ -47,4 +48,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // relasi ke tabel meter (one to one)
+    public function meter(): BelongsTo
+    {
+        return $this->belongsTo(Meter::class, 'meter_id', 'id');
+    }
 }

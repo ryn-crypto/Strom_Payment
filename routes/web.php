@@ -27,5 +27,8 @@ Route::prefix('/User')->group(function () {
 Route::prefix('/Admin')->group(function () {
     Route::get('/', [AdminController::class, 'index']);
     Route::get('/dataPelanggan', [AdminController::class, 'dataPelanggan']);
+    Route::post('/add', [AdminController::class, 'addPelanggan']);
+    Route::post('/edit', [AdminController::class, 'editPelanggan']);
+    Route::get('/delete/{id}', [AdminController::class, 'deletePelanggan']);
     Route::get('/dataTagihan', [AdminController::class, 'dataTagihan']);
 });

@@ -5,8 +5,12 @@
 
   <main class="content">
     <div class="container-fluid p-0">
-
       <h1 class="h3 mb-3"> Data <strong>Pelanggan</strong></h1>
+      @if (Session::has('status'))
+        <div class="alert alert-success" role="alert">
+          {{ Session::get('pesan') }}
+        </div>
+      @endif
 
       <div class="row">
         <div class="col d-flex">
@@ -14,17 +18,20 @@
             <div class="row">
               <div class="col-12">
                 <div class="card">
-                  <div class="row d-flex justify-content-end">
-                    <button class="col-4 btn btn-outline-success m-3">Tambah Data Custommer</button>
+                  <div class="row d-none d-md-flex justify-content-end">
+                    <button class="col-3 btn btn-outline-success me-5 mt-3" type="button" data-bs-toggle="modal"
+                      data-bs-target="#tambahData">Tambah Data Custommer</button>
                   </div>
                   <div class="card-body">
-                    <table class="table">
+                    <table class="table text-center">
                       <thead>
                         <tr>
                           <th scope="col">No</th>
                           <th scope="col">Nama</th>
                           <th scope="col">Email</th>
                           <th scope="col">Alamat</th>
+                          <th scope="col">Nomor Meter</th>
+                          <th scope="col">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -34,275 +41,204 @@
                             <td>{{ $item->nama }}</td>
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->alamat }}</td>
+                            <td>{{ $item->meter->no_meter }}</td>
+                            <td>
+                              <button class="btn btn-outline-warning" type="button" data-bs-toggle="modal"
+                                data-bs-target="#edit" data-bs-email="{{ $item->email }}"
+                                data-bs-nama="{{ $item->nama }}" data-bs-alamat="{{ $item->alamat }}"
+                                data-bs-noMeter="{{ $item->meter->no_meter }}" data-bs-id="{{ $item->id }}"
+                                data-bs-tarif="{{ $item->meter->tarif->id }}">Edit</button>
+                              <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal"
+                                data-bs-target="#hapus" data-bs-nama="{{ $item->nama }}"
+                                data-bs-id="{{ $item->id }}">Hapus</button>
+                            </td>
                           </tr>
                         @endforeach
                       </tbody>
                     </table>
+
                   </div>
                 </div>
-
-
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </main>
 
-  <footer class="footer">
-    <div class="container-fluid">
-      <div class="row text-muted">
-        <div class="col-6 text-start">
-          <p class="mb-0">
-            <a class="text-muted" href="https://adminkit.io/" target="_blank"><strong>AdminKit</strong></a> - <a
-              class="text-muted" href="https://adminkit.io/" target="_blank"><strong>Bootstrap Admin
-                Template</strong></a> &copy;
-          </p>
+  <!-- Modal tambah data -->
+  <div class="modal fade" id="tambahData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Tambah Data Custommer</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="col-6 text-end">
-          <ul class="list-inline">
-            <li class="list-inline-item">
-              <a class="text-muted" href="https://adminkit.io/" target="_blank">Support</a>
-            </li>
-            <li class="list-inline-item">
-              <a class="text-muted" href="https://adminkit.io/" target="_blank">Help Center</a>
-            </li>
-            <li class="list-inline-item">
-              <a class="text-muted" href="https://adminkit.io/" target="_blank">Privacy</a>
-            </li>
-            <li class="list-inline-item">
-              <a class="text-muted" href="https://adminkit.io/" target="_blank">Terms</a>
-            </li>
-          </ul>
+        <div class="modal-body">
+          <form action="/Admin/add" method="POST">
+            @csrf
+            <div class="row">
+              <div class="col-12 col-md-6 mt-2">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email">
+              </div>
+              <div class="col-12 col-md-6 mt-2">
+                <label for="nama" class="form-label">Nama</label>
+                <input type="text" class="form-control" id="nama" name="nama">
+              </div>
+              <div class="col-12 col-md-6 mt-2">
+                <label for="alamat" class="form-label">Alamat</label>
+                <input type="text" class="form-control" id="alamat" name="alamat">
+              </div>
+              <div class="col-12 col-md-6 mt-2">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" name="password" id="password">
+              </div>
+              <div class="col-12 mt-3">
+                <select class="form-select" aria-label="Default select" name="tarif_id">
+                  <option selected>Pilih Daya Listri</option>
+                  @foreach ($tarif as $value)
+                    <option value="{{ $value->id }}">{{ $value->daya }} VA</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer mt-3">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">Tambahkan</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-  </footer>
-  </div>
   </div>
 
+  <!-- Modal edit data -->
+  <div class="modal fade" id="edit" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Edit Data Custommer</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="/Admin/edit" method="POST">
+            @csrf
+            <div class="row">
+              <div class="col-12 col-md-6 mt-2">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" readonly>
+              </div>
+              <div class="col-12 col-md-6 mt-2">
+                <label for="nama" class="form-label">Nama</label>
+                <input type="text" class="form-control" id="nama" name="nama">
+              </div>
+              <div class="col-12 col-md-6 mt-2">
+                <label for="alamat" class="form-label">Alamat</label>
+                <input type="text" class="form-control" id="alamat" name="alamat">
+              </div>
+              <div class="col-12 col-md-6 mt-2">
+                <label for="noMeter" class="form-label">No Meter</label>
+                <input type="text" class="form-control" name="no_meter" id="noMeter" readonly>
+              </div>
+              <input type="text" class="form-control" name="id" id="idUser" hidden>
+              <div class="col-12 mt-3">
+                <select class="form-select" aria-label="Default select" id="tarif" name="tarif_id">
+                  <option selected>Pilih Daya Listri</option>
+                  @foreach ($tarif as $value)
+                    <option value="{{ $value->id }}">{{ $value->daya }} VA</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            <div class="modal-footer mt-3">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-warning">Simpan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal delete data -->
+  <div class="modal fade" id="hapus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Hapus Data</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Yakin menghapus data ini ?</p>
+          <div class="modal-footer mt-3">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <form method="get">
+              @csrf
+              <a href="" id="hapusData" type="submit" class="btn btn-danger">Hapus Data</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{-- untuk modal edit data --}}
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var ctx = document.getElementById("chartjs-dashboard-line").getContext("2d");
-      var gradient = ctx.createLinearGradient(0, 0, 0, 225);
-      gradient.addColorStop(0, "rgba(215, 227, 244, 1)");
-      gradient.addColorStop(1, "rgba(215, 227, 244, 0)");
-      // Line chart
-      new Chart(document.getElementById("chartjs-dashboard-line"), {
-        type: "line",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [{
-            label: "Sales ($)",
-            fill: true,
-            backgroundColor: gradient,
-            borderColor: window.theme.primary,
-            data: [
-              2115,
-              1562,
-              1584,
-              1892,
-              1587,
-              1923,
-              2566,
-              2448,
-              2805,
-              3438,
-              2917,
-              3327
-            ]
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          legend: {
-            display: false
-          },
-          tooltips: {
-            intersect: false
-          },
-          hover: {
-            intersect: true
-          },
-          plugins: {
-            filler: {
-              propagate: false
-            }
-          },
-          scales: {
-            xAxes: [{
-              reverse: true,
-              gridLines: {
-                color: "rgba(0,0,0,0.0)"
-              }
-            }],
-            yAxes: [{
-              ticks: {
-                stepSize: 1000
-              },
-              display: true,
-              borderDash: [3, 3],
-              gridLines: {
-                color: "rgba(0,0,0,0.0)"
-              }
-            }]
-          }
-        }
-      });
-    });
+    let modalEdit = document.getElementById('edit')
+    modalEdit.addEventListener('show.bs.modal', function(event) {
+      // Button that triggered the modal
+      let button = event.relatedTarget
+
+      // ambil data dari triger modals
+      let email = button.getAttribute('data-bs-email')
+      let nama = button.getAttribute('data-bs-nama')
+      let alamat = button.getAttribute('data-bs-alamat')
+      let noMeter = button.getAttribute('data-bs-noMeter')
+      let iduser = button.getAttribute('data-bs-id')
+      let tarif = button.getAttribute('data-bs-tarif')
+
+      // persiapkan form 
+      let formemail = modalEdit.querySelector('#email')
+      let formnama = modalEdit.querySelector('#nama')
+      let formalamat = modalEdit.querySelector('#alamat')
+      let formnoMeter = modalEdit.querySelector('#noMeter')
+      let formIduser = modalEdit.querySelector('#idUser')
+      let formtarif = modalEdit.querySelector('#tarif')
+
+      // modalTitle.textContent = 'New message to ' + recipient
+      formemail.value = email
+      formnama.value = nama
+      formalamat.value = alamat
+      formnoMeter.value = noMeter
+      formIduser.value = iduser
+      formtarif.value = tarif
+    })
   </script>
+
+  {{-- untuk modal hapus data --}}
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Pie chart
-      new Chart(document.getElementById("chartjs-dashboard-pie"), {
-        type: "pie",
-        data: {
-          labels: ["Chrome", "Firefox", "IE"],
-          datasets: [{
-            data: [4306, 3801, 1689],
-            backgroundColor: [
-              window.theme.primary,
-              window.theme.warning,
-              window.theme.danger
-            ],
-            borderWidth: 5
-          }]
-        },
-        options: {
-          responsive: !window.MSInputMethodContext,
-          maintainAspectRatio: false,
-          legend: {
-            display: false
-          },
-          cutoutPercentage: 75
-        }
-      });
-    });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      // Bar chart
-      new Chart(document.getElementById("chartjs-dashboard-bar"), {
-        type: "bar",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [{
-            label: "This year",
-            backgroundColor: window.theme.primary,
-            borderColor: window.theme.primary,
-            hoverBackgroundColor: window.theme.primary,
-            hoverBorderColor: window.theme.primary,
-            data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
-            barPercentage: .75,
-            categoryPercentage: .5
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          legend: {
-            display: false
-          },
-          scales: {
-            yAxes: [{
-              gridLines: {
-                display: false
-              },
-              stacked: false,
-              ticks: {
-                stepSize: 20
-              }
-            }],
-            xAxes: [{
-              stacked: false,
-              gridLines: {
-                color: "transparent"
-              }
-            }]
-          }
-        }
-      });
-    });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var markers = [{
-          coords: [31.230391, 121.473701],
-          name: "Shanghai"
-        },
-        {
-          coords: [28.704060, 77.102493],
-          name: "Delhi"
-        },
-        {
-          coords: [6.524379, 3.379206],
-          name: "Lagos"
-        },
-        {
-          coords: [35.689487, 139.691711],
-          name: "Tokyo"
-        },
-        {
-          coords: [23.129110, 113.264381],
-          name: "Guangzhou"
-        },
-        {
-          coords: [40.7127837, -74.0059413],
-          name: "New York"
-        },
-        {
-          coords: [34.052235, -118.243683],
-          name: "Los Angeles"
-        },
-        {
-          coords: [41.878113, -87.629799],
-          name: "Chicago"
-        },
-        {
-          coords: [51.507351, -0.127758],
-          name: "London"
-        },
-        {
-          coords: [40.416775, -3.703790],
-          name: "Madrid "
-        }
-      ];
-      var map = new jsVectorMap({
-        map: "world",
-        selector: "#world_map",
-        zoomButtons: true,
-        markers: markers,
-        markerStyle: {
-          initial: {
-            r: 9,
-            strokeWidth: 7,
-            stokeOpacity: .4,
-            fill: window.theme.primary
-          },
-          hover: {
-            fill: window.theme.primary,
-            stroke: window.theme.primary
-          }
-        },
-        zoomOnScroll: false
-      });
-      window.addEventListener("resize", () => {
-        map.updateSize();
-      });
-    });
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      var date = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
-      var defaultDate = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
-      document.getElementById("datetimepicker-dashboard").flatpickr({
-        inline: true,
-        prevArrow: "<span title=\"Previous month\">&laquo;</span>",
-        nextArrow: "<span title=\"Next month\">&raquo;</span>",
-        defaultDate: defaultDate
-      });
-    });
+    let modalHapus = document.getElementById('hapus')
+    modalHapus.addEventListener('show.bs.modal', function(event) {
+      // Button that triggered the modal
+      let button = event.relatedTarget
+
+      // ambil data dari triger modals
+      let id = button.getAttribute('data-bs-id')
+      let nama = button.getAttribute('data-bs-nama')
+
+      // persiapkan form 
+      let formdelete = modalHapus.querySelector('#hapusData')
+      let modalTitle = modalHapus.querySelector('.modal-title')
+
+      // modalTitle.textContent = 'New message to ' + recipient
+      modalTitle.textContent = 'Hapus data' + nama
+      formdelete.setAttribute('href', '/Admin/delete/' + id)
+    })
   </script>
 
 @endsection
