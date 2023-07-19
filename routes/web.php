@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// route untuk User (pelanggan dan juga admin adalah user) 
+Route::prefix('/User')->group(function () {
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/status', [UserController::class, 'status']);
+    Route::get('/password', [UserController::class, 'ubahPassword']);
+    Route::get('/riwayat', [UserController::class, 'riwayat']);
+});
+
+// route untuk Admin (hanya admin yang boleh mengakses)
+Route::prefix('/Admin')->group(function () {
+    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/dataPelanggan', [AdminController::class, 'dataPelanggan']);
+    Route::get('/dataTagihan', [AdminController::class, 'dataTagihan']);
 });
