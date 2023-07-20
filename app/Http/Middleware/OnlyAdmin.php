@@ -18,7 +18,7 @@ class OnlyAdmin
     {
         // hanya boleh di akses oleh admin
         if ((Auth::user()->level_id) != 1) {
-            abort(404);
+            return redirect('/User');
         }
 
         return $next($request);

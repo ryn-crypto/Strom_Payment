@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// route utama
+Route::get('/', [AdminController::class, 'index'])->middleware('auth', 'onlyAdmin');
+
 // route untuk User (pelanggan dan juga admin adalah user) 
 Route::prefix('/User')->middleware('auth')->group(function () {
     Route::get('/', [UserController::class, 'index']);
