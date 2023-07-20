@@ -8,41 +8,45 @@
           <span class="align-middle">Strom Payment</span>
         </a>
 
-        <ul class="sidebar-nav">
-          <li class="sidebar-header">
-            Admin
-          </li>
+        <ul class="sidebar-nav">z
+          @if (Auth::user()->level_id != 1)
+            -
+          @else
+            <li class="sidebar-header">
+              Admin
+            </li>
 
-          @if ($judul_menu == 'dasboard')
-            <li class="sidebar-item active">
-            @else
-            <li class="sidebar-item">
-          @endif
-          <a class="sidebar-link" href="/Admin/">
-            <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
-          </a>
-          </li>
+            @if ($judul_menu == 'dasboard')
+              <li class="sidebar-item active">
+              @else
+              <li class="sidebar-item">
+            @endif
+            <a class="sidebar-link" href="/Admin/">
+              <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+            </a>
+            </li>
 
-          @if ($judul_menu == 'data_pelanggan')
-            <li class="sidebar-item active">
-            @else
-            <li class="sidebar-item">
-          @endif
-          <a class="sidebar-link" href="/Admin/dataPelanggan">
-            <i class="align-middle" data-feather="list"></i> <span class="align-middle">Daftar Pelanggan</span>
-          </a>
-          </li>
+            @if ($judul_menu == 'data_pelanggan')
+              <li class="sidebar-item active">
+              @else
+              <li class="sidebar-item">
+            @endif
+            <a class="sidebar-link" href="/Admin/dataPelanggan">
+              <i class="align-middle" data-feather="list"></i> <span class="align-middle">Daftar Pelanggan</span>
+            </a>
+            </li>
 
-          @if ($judul_menu == 'data_tagihan')
-            <li class="sidebar-item active">
-            @else
-            <li class="sidebar-item">
+            @if ($judul_menu == 'data_tagihan')
+              <li class="sidebar-item active">
+              @else
+              <li class="sidebar-item">
+            @endif
+            <a class="sidebar-link" href="/Admin/dataTagihan">
+              <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Tagihan
+                Pelanggan</span>
+            </a>
+            </li>
           @endif
-          <a class="sidebar-link" href="/Admin/dataTagihan">
-            <i class="align-middle" data-feather="dollar-sign"></i> <span class="align-middle">Tagihan
-              Pelanggan</span>
-          </a>
-          </li>
 
           <li class="sidebar-header">
             User
@@ -94,7 +98,7 @@
           </li>
 
           <li class="sidebar-item">
-            <a class="sidebar-link" href="/Logout">
+            <a class="sidebar-link" href="/auth/logout">
               <i class="align-middle" data-feather="log-out"></i> <span class="align-middle">Log Out</span>
             </a>
           </li>
@@ -112,21 +116,20 @@
           <ul class="navbar-nav navbar-align">
 
             <li class="nav-item dropdown">
-              <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
+              <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" data-bs-toggle="dropdown" id="menu1">
                 <i class="align-middle" data-feather="settings"></i>
               </a>
-
-              <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
+              <a class="nav-link dropdown-toggle d-none d-sm-inline-block" data-bs-toggle="dropdown">
                 <img src="{{ asset('/img/default.jpg') }}" class="avatar img-fluid rounded me-1" alt="Charles Hall" />
-                <span class="text-dark">Charles Hall</span>
+                <span class="text-dark">Nama</span>
               </a>
-              <div class="dropdown-menu dropdown-menu-end">
+              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="menu1">
                 <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i>
                   Profile</a>
-                <a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i>
+                <a class="dropdown-item" href="User/"><i class="align-middle me-1" data-feather="settings"></i>
                   Settings</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Log out</a>
+                <a class="dropdown-item" href="/auth/logout">Log out</a>
               </div>
             </li>
           </ul>

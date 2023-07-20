@@ -7,7 +7,11 @@
       <div class="row vh-100">
         <div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
           <div class="d-table-cell align-middle">
-
+            @if (Session::has('status'))
+              <div class="alert alert-danger" role="alert">
+                {{ Session::get('pesan') }}
+              </div>
+            @endif
             <div class="text-center mt-4">
               <h1 class="h2">Selamat Datang!</h1>
               <p class="lead">
@@ -18,19 +22,20 @@
             <div class="card">
               <div class="card-body">
                 <div class="m-sm-3">
-                  <form>
+                  <form method="POST" action="/auth/login">
+                    @csrf
                     <div class="mb-3">
-                      <label class="form-label">Email</label>
-                      <input class="form-control form-control-lg" type="email" name="email"
+                      <label class="form-label" for="email">Email</label>
+                      <input class="form-control form-control-lg" id="email" type="email" name="email"
                         placeholder="masukan email" />
                     </div>
                     <div class="mb-3">
-                      <label class="form-label">Password</label>
-                      <input class="form-control form-control-lg" type="password" name="password"
+                      <label class="form-label" for="password">Password</label>
+                      <input class="form-control form-control-lg" id="password" type="password" name="password"
                         placeholder="masukan password" />
                     </div>
                     <div class="d-grid gap-2 mt-3">
-                      <a href="index.html" class="btn btn-lg btn-primary">Sign in</a>
+                      <button type="submit" class="btn btn-lg btn-primary">Masuk</button>
                     </div>
                   </form>
                 </div>
