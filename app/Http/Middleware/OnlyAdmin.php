@@ -18,9 +18,11 @@ class OnlyAdmin
     {
         // hanya boleh di akses oleh admin
         if ((Auth::user()->level_id) != 1) {
+            // jika user dengan id selain 1 maka akan di kembalikan pada halaman \user
             return redirect('/User');
         }
 
+        // user yang lolos pengecakan id bisa melanjutkan akses ke halaman yang dituju
         return $next($request);
     }
 }

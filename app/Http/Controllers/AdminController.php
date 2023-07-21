@@ -25,7 +25,7 @@ class AdminController extends Controller
         // untuk mengambil id tarif
         $tarif = Tarif::all();
         // untuk mengambil semua data custommer
-        $user = User::with('meter.tarif')->get();
+        $user = User::with('meter.tarif')->paginate(20);
 
         // mengarahkan kehalaman view dengan membawa data
         return view("admin.data-pelanggan", ['judul_menu' => 'data_pelanggan', 'dataUser' => $user, 'tarif' => $tarif]);
