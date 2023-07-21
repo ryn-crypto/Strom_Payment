@@ -18,10 +18,22 @@
             <div class="row">
               <div class="col-12">
                 <div class="card">
-                  <div class="row d-none d-md-flex justify-content-end">
-                    <button class="col-3 btn btn-outline-success me-5 mt-3" type="button" data-bs-toggle="modal"
-                      data-bs-target="#tambahData">Tambah Data Custommer</button>
+                  <div class="row d-flex justify-content-between mt-3 ps-3">
+                    <div class="col-4">
+                      <form action="" method="GET">
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="Keyword" name="keyword">
+                          <button type="submit" class="input-group-text btn btn-primary"
+                            id="basic-addon1">Search</i></button>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="col-6 d-none d-md-flex justify-content-end me-3">
+                      <button class="col-8 btn btn-outline-success" type="button" data-bs-toggle="modal"
+                        data-bs-target="#tambahData">Tambah Data Custommer</button>
+                    </div>
                   </div>
+
                   <div class="card-body">
                     <table class="table text-center">
                       <thead>

@@ -20,12 +20,20 @@ class AdminController extends Controller
     }
 
     // menampilkan data Pelanggan
-    public function dataPelanggan()
+    public function dataPelanggan(Request $request)
     {
+        // ambil keyword dari input searching
+        $keyword = $request->keyword;
+
         // untuk mengambil id tarif
         $tarif = Tarif::all();
+
         // untuk mengambil semua data custommer
-        $user = User::with('meter.tarif')->paginate(20);
+        $user = User::with('meter.tarif')
+            ->where('nama', 'LIKE', "%" . $keyword . '%')
+            ->orWhereHas('meter', function ($query) use ($keyword) {
+                $query->where('no_meter', 'LIKE', "%" . $keyword . '%');
+            })->paginate(20);
 
         // mengarahkan kehalaman view dengan membawa data
         return view("admin.data-pelanggan", ['judul_menu' => 'data_pelanggan', 'dataUser' => $user, 'tarif' => $tarif]);
