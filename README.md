@@ -27,3 +27,17 @@ Untuk menjalankan program ini bisa menggunakan cara berikut
 ```bash
   php artisan serve
 ```
+
+## Login
+
+Gunakan user berikut
+
+```bash
+  email : riyandotianto2@gmail.com
+  password : 12345
+```
+    
+## Authors
+
+- [@Riyan](https://github.com/ryn-crypto/)
+
