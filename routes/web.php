@@ -44,8 +44,4 @@ Route::prefix('/auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth');
 });
 
-
-// tambahkan route untuk dasboard
-Route::get('dasboard', function ($id) {
-    // pindahkan kedasboard
-});
+Route::get('/', [DasboardController::class, 'index'])->middleware('auth')
