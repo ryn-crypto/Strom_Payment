@@ -44,5 +44,4 @@ Route::prefix('/auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->middleware('auth');
 });
 
-// route untuk dashboard
 Route::get('/', [DasboardController::class, 'index'])->middleware('auth')
